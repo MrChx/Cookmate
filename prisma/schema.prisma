@@ -1,0 +1,104 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum Difficulty {
+  Easy
+  Medium
+  Hard
+}
+
+enum RecipeStatus {
+  PUBLISHED
+  DRAFT
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(ADMIN)
+  recipes   Recipe[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Category {
+  id      String   @id @default(cuid())
+  name    String   @unique
+  recipes Recipe[]
+}
+
+model Ingredient {
+  id        String             @id @default(cuid())
+  name      String             @unique
+  image     String?
+  recipes   RecipeIngredient[]
+  createdAt DateTime           @default(now())
+}
+
+model Recipe {
+  id           String             @id @default(cuid())
+  title        String
+  description  String
+  image        String?
+  prepTime     Int
+  cookTime     Int
+  difficulty   Difficulty         @default(Easy)
+  calories     Int?
+  servings     Int                @default(4)
+  rating       Float              @default(0)
+  status       RecipeStatus       @default(PUBLISHED)
+  category     Category           @relation(fields: [categoryId], references: [id])
+  categoryId   String
+  author       User               @relation(fields: [authorId], references: [id])
+  authorId     String
+  ingredients  RecipeIngredient[]
+  instructions Instruction[]
+  reviews      Review[]
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+}
+
+model RecipeIngredient {
+  id           String     @id @default(cuid())
+  recipe       Recipe     @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  recipeId     String
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
+  ingredientId String
+  quantity     String
+
+  @@unique([recipeId, ingredientId])
+}
+
+model Instruction {
+  id          String  @id @default(cuid())
+  recipe      Recipe  @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  recipeId    String
+  stepNumber  Int
+  title       String
+  description String
+  image       String?
+
+  @@unique([recipeId, stepNumber])
+}
+
+model Review {
+  id         String   @id @default(cuid())
+  recipe     Recipe   @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  recipeId   String
+  authorName String
+  rating     Float
+  comment    String
+  createdAt  DateTime @default(now())
+}
