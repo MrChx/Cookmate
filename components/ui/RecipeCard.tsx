@@ -9,6 +9,7 @@ interface RecipeCardProps {
   cookTime: number;
   difficulty: "Easy" | "Medium" | "Hard";
   rating: number;
+  selectedIngredientIds?: string[];
 }
 
 export default function RecipeCard({
@@ -19,6 +20,7 @@ export default function RecipeCard({
   cookTime,
   difficulty,
   rating,
+  selectedIngredientIds = [],
 }: RecipeCardProps) {
   const totalTime = prepTime + cookTime;
   const fallback =
@@ -60,7 +62,7 @@ export default function RecipeCard({
             </span>
           </div>
           <Link
-            href={`/recipes/${id}`}
+            href={`/recipes/${id}${selectedIngredientIds.length > 0 ? `?myIngredients=${selectedIngredientIds.join(",")}` : ""}`}
             className="text-primary font-bold text-sm hover:underline"
           >
             View Recipe

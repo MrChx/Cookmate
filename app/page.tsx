@@ -197,6 +197,7 @@ export default function Home() {
                       cookTime={recipe.cookTime}
                       difficulty={recipe.difficulty}
                       rating={recipe.rating ?? 0}
+                      selectedIngredientIds={selectedIngredients.map((i: any) => i.id)}
                     />
                   </div>
                 ))}

@@ -39,19 +39,23 @@ export async function GET(req: Request) {
     });
 
     if (userIngredientIds && userIngredientIds.length > 0) {
-      recipes = recipes.filter((recipe) => {
-
-        const recipeIngredientIds = recipe.ingredients.map(
-          (ri) => ri.ingredientId
-        );
-
-        if (recipeIngredientIds.length === 0) return false;
-
-        return recipeIngredientIds.every((id) =>
-          userIngredientIds.includes(id)
-        );
-      });
+      recipes = recipes
+        .filter((recipe) => {
+          const recipeIngredientIds = recipe.ingredients.map(
+            (ri) => ri.ingredientId
+          );
+          if (recipeIngredientIds.length === 0) return false;
+          return recipeIngredientIds.some((id) =>
+            userIngredientIds.includes(id)
+          );
+        })
+        .sort((a, b) => {
+          const aMatch = a.ingredients.filter((ri) => userIngredientIds.includes(ri.ingredientId)).length / a.ingredients.length;
+          const bMatch = b.ingredients.filter((ri) => userIngredientIds.includes(ri.ingredientId)).length / b.ingredients.length;
+          return bMatch - aMatch;
+        });
     }
+
 
     return NextResponse.json(recipes);
   } catch (error) {
@@ -72,7 +76,6 @@ export async function POST(req: Request) {
 
     const data = await req.json();
 
-    // Pastikan admin id terekam sebagai author
     if (!data.authorId) {
       data.authorId = session.user.id;
     }

@@ -1,16 +1,20 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useParams } from "next/navigation";
-import { Clock, Flame, BarChart2, Star, Utensils, ArrowLeft } from "lucide-react";
+import { useParams, useSearchParams } from "next/navigation";
+import { Clock, Flame, BarChart2, Star, Utensils, ArrowLeft, CheckCircle2, Circle } from "lucide-react";
 import Link from "next/link";
 
 export default function RecipeDetail() {
   const params = useParams();
+  const searchParams = useSearchParams();
   const id = params.id as string;
   const [recipe, setRecipe] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [checkedIngredients, setCheckedIngredients] = useState<Set<string>>(new Set());
+
+  // Read user's ingredient IDs from URL query param
+  const myIngredientIds = searchParams.get("myIngredients")?.split(",").filter(Boolean) || [];
 
   useEffect(() => {
     if (id) {
@@ -18,6 +22,16 @@ export default function RecipeDetail() {
         .then((res) => res.json())
         .then((data) => {
           setRecipe(data);
+          // Auto-check ingredients that the user has (from myIngredients param)
+          if (myIngredientIds.length > 0 && data.ingredients) {
+            const matched = new Set<string>();
+            data.ingredients.forEach((item: any) => {
+              if (myIngredientIds.includes(item.ingredientId)) {
+                matched.add(item.id);
+              }
+            });
+            setCheckedIngredients(matched);
+          }
           setIsLoading(false);
         })
         .catch((err) => {
@@ -139,16 +153,21 @@ export default function RecipeDetail() {
                   return (
                     <li key={item.id}>
                       <label className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 cursor-pointer group transition-colors">
-                        <input
-                          type="checkbox"
-                          checked={checked}
-                          onChange={() => toggleIngredient(item.id)}
-                          className="h-5 w-5 rounded border-slate-300 text-primary focus:ring-primary focus:ring-offset-0 accent-primary cursor-pointer"
-                        />
+                        <button
+                          type="button"
+                          onClick={() => toggleIngredient(item.id)}
+                          className="shrink-0"
+                        >
+                          {checked ? (
+                            <CheckCircle2 className="w-5 h-5 text-green-500 fill-green-500 stroke-white" />
+                          ) : (
+                            <Circle className="w-5 h-5 text-slate-300" />
+                          )}
+                        </button>
                         <span
                           className={`flex-1 font-semibold transition-colors ${
                             checked
-                              ? "text-slate-400 line-through"
+                              ? "text-green-600"
                               : "text-slate-900 group-hover:text-slate-700"
                           }`}
                         >
