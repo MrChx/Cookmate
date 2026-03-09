@@ -7,10 +7,12 @@ import Footer from "@/components/layout/Footer";
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isAdmin = pathname?.startsWith("/admin");
+  const isLogin = pathname === "/login";
 
-  if (isAdmin) {
+  if (isAdmin || isLogin) {
     return <>{children}</>;
   }
+
 
   return (
     <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden">
