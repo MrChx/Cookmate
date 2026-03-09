@@ -1,0 +1,251 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f8f7f5;
+  --foreground: #0f172a; /* slate-900 */
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-plus-jakarta), sans-serif;
+  --color-primary: #f48c25;
+  --color-background-light: #f8f7f5;
+  --color-background-dark: #221910;
+
+  --radius-DEFAULT: 0.25rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --radius-full: 9999px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #221910;
+    --foreground: #f1f5f9;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+
+/* Hero title: slide in from bottom */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Fade in gently */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Subtle background pan for the hero image */
+@keyframes heroPan {
+  0%   { transform: scale(1.08) translateX(0); }
+  50%  { transform: scale(1.08) translateX(-1%); }
+  100% { transform: scale(1.08) translateX(0); }
+}
+
+/* Card pop-in from below */
+@keyframes cardAppear {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Tag bounce in */
+@keyframes tagBounce {
+  0%   { opacity: 0; transform: scale(0.8); }
+  60%  { transform: scale(1.08); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* Results section slide down */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- Applied classes --- */
+
+.hero-title {
+  animation: slideUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.hero-subtitle {
+  animation: slideUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
+}
+
+.hero-search {
+  animation: slideUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.28s both;
+}
+
+.hero-bg {
+  animation: heroPan 18s ease-in-out infinite;
+}
+
+.hero-card {
+  animation: fadeIn 0.5s ease both;
+}
+
+.tag-item {
+  animation: tagBounce 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.card-appear {
+  animation: cardAppear 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.results-section {
+  animation: slideDown 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ============================================================
+   RECIPE DETAIL PAGE ANIMATIONS
+   ============================================================ */
+
+/* Hero image subtle zoom on load */
+@keyframes heroZoom {
+  from { transform: scale(1.05); }
+  to   { transform: scale(1); }
+}
+
+/* Badge + title slide up from bottom */
+@keyframes heroContentReveal {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Panel slide in from left */
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-24px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* Step slide in from right */
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(24px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* Meta card pop in */
+@keyframes metaPop {
+  from { opacity: 0; transform: translateY(16px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.recipe-hero {
+  animation: fadeIn 0.4s ease both;
+}
+
+.recipe-hero-img {
+  animation: heroZoom 1.2s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.recipe-hero-badges {
+  animation: heroContentReveal 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
+}
+
+.recipe-hero-title {
+  animation: heroContentReveal 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.32s both;
+}
+
+.recipe-hero-desc {
+  animation: heroContentReveal 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.44s both;
+}
+
+.recipe-fade-in {
+  animation: fadeIn 0.5s ease 0.5s both;
+}
+
+.recipe-meta-grid {
+  animation: fadeIn 0.5s ease 0.55s both;
+}
+
+.meta-card {
+  animation: metaPop 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.ingredients-panel {
+  animation: slideInLeft 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.6s both;
+}
+
+.step-block {
+  animation: slideInRight 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ============================================================
+   ADMIN PAGE ANIMATIONS
+   ============================================================ */
+
+@keyframes adminPageEnter {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes modalPop {
+  from { opacity: 0; transform: scale(0.93) translateY(12px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes toastSlideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes statCardIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes tableRowIn {
+  from { opacity: 0; transform: translateX(-8px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.admin-page-enter {
+  animation: adminPageEnter 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.admin-modal-pop {
+  animation: modalPop 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.admin-toast {
+  animation: toastSlideUp 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.stat-card {
+  animation: statCardIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.recipe-row {
+  animation: tableRowIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
